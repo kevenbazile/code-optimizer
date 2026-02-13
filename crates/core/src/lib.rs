@@ -317,6 +317,32 @@ impl CodeOptimizer {
     }
 }
 
+///default
+impl Default for OptimizerConfig {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl Default for CodeOptimizer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+
+///new
+use std::path::Path;
+
+pub fn detect_language_from_path(path: &Path) -> Option<Language> {
+    match path.extension().and_then(|ext| ext.to_str()) {
+        Some("js") | Some("jsx") | Some("ts") | Some("tsx") => Some(Language::JavaScript),
+        Some("py") => Some(Language::Python),
+        Some("rs") => Some(Language::Rust),
+        _ => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -416,5 +442,15 @@ for item in items:
         for opt in &optimizations {
             println!("  ✨ Custom: {}", opt.explanation);
         }
+    }
+
+    #[test]
+    fn test_detect_typescript_as_javascript() {
+        use std::path::PathBuf;
+
+        let path = PathBuf::from("example.ts");
+        let language = detect_language_from_path(&path);
+
+        assert_eq!(language, Some(Language::JavaScript));
     }
 }
