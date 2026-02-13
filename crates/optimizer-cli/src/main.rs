@@ -67,7 +67,9 @@ fn main() {
     }
 }
 
-fn detect_language_from_path(path: &PathBuf) -> Option<Language> {
+use std::path::Path;
+
+fn detect_language_from_path(path: &Path) -> Option<Language>{
     let extension = path.extension()?.to_str()?;
 
     match extension {
