@@ -7,6 +7,7 @@ use std::collections::HashMap;
 #[derive(Debug, Clone, PartialEq)]
 pub enum Language {
     JavaScript,
+    TypeScript,
     Python,
     Rust,
 }
@@ -172,6 +173,29 @@ impl CodeOptimizer {
         self.rules.push(OptimizationRule {
             name: "use-strict-equality".to_string(),
             language: Language::JavaScript,
+            pattern_type: PatternType::Contains(" == ".to_string()),
+            replacement: " === ".to_string(),
+            explanation: "Use strict equality '===' to avoid type coercion bugs".to_string(),
+            severity: Severity::Warning,
+            confidence: 0.9,
+            enabled: true,
+        });
+
+        // TypeScript rules reuse JavaScript optimizations.
+        self.rules.push(OptimizationRule {
+            name: "use-const".to_string(),
+            language: Language::TypeScript,
+            pattern_type: PatternType::Contains("let ".to_string()),
+            replacement: "const ".to_string(),
+            explanation: "Use 'const' for variables that never change".to_string(),
+            severity: Severity::Info,
+            confidence: 0.8,
+            enabled: true,
+        });
+
+        self.rules.push(OptimizationRule {
+            name: "use-strict-equality".to_string(),
+            language: Language::TypeScript,
             pattern_type: PatternType::Contains(" == ".to_string()),
             replacement: " === ".to_string(),
             explanation: "Use strict equality '===' to avoid type coercion bugs".to_string(),
@@ -417,4 +441,14 @@ for item in items:
             println!("  ✨ Custom: {}", opt.explanation);
         }
     }
+    #[test]
+    fn test_typescript_analysis() {
+        let optimizer = CodeOptimizer::new();
+        let code = "let count: number = 1;\nif (count == 1) {}";
+        let optimizations = optimizer.analyze_code(code, Language::TypeScript);
+
+        assert!(optimizations.iter().any(|opt| opt.rule_name == "use-const"));
+        assert!(optimizations.iter().any(|opt| opt.rule_name == "use-strict-equality"));
+    }
+
 }

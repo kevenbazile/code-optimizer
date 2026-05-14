@@ -32,7 +32,7 @@ fn main() {
             eprintln!(
                 "Error: Could not determine the programming language from the file extension."
             );
-            eprintln!("Supported extensions are: .js, .ts, .py, .rs");
+            eprintln!("Supported extensions are: .js, .ts, .tsx, .py, .rs");
             std::process::exit(1);
         }
     };
@@ -71,7 +71,8 @@ fn detect_language_from_path(path: &PathBuf) -> Option<Language> {
     let extension = path.extension()?.to_str()?;
 
     match extension {
-        "js" | "ts" => Some(Language::JavaScript),
+        "js" => Some(Language::JavaScript),
+        "ts" | "tsx" => Some(Language::TypeScript),
         "py" => Some(Language::Python),
         "rs" => Some(Language::Rust),
         _ => None,

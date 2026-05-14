@@ -135,7 +135,7 @@ async function analyzeDocument(document, diagnosticCollection) {
 }
 
 function isSupported(languageId) {
-    return ['javascript', 'typescript', 'python', 'rust'].includes(languageId);
+    return ['javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'python', 'rust'].includes(languageId);
 }
 
 function getSeverity(severity) {
@@ -159,7 +159,7 @@ async function simulateRustAnalysis(document) {
     
     lines.forEach((line, index) => {
         // Simulate JavaScript optimizations
-        if (document.languageId === 'javascript' || document.languageId === 'typescript') {
+        if (['javascript', 'javascriptreact', 'typescript', 'typescriptreact'].includes(document.languageId)) {
             if (line.includes('let ') && line.includes('=') && !line.includes('let i')) {
                 optimizations.push({
                     rule_name: 'use-const',
