@@ -21,9 +21,10 @@
   ],
   "activationEvents": [
     "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
     "onLanguage:python",
-    "onLanguage:rust",
-    "onLanguage:typescript"
+    "onLanguage:rust"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -49,7 +50,7 @@
         {
           "command": "codeOptimizer.analyzeFile",
           "group": "optimization",
-          "when": "resourceExtname =~ /\\.(js|ts|py|rs)$/"
+          "when": "resourceExtname =~ /\\.(js|jsx|ts|tsx|py|rs)$/"
         }
       ],
       "commandPalette": [
